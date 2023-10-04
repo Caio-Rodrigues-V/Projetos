@@ -1,82 +1,118 @@
-#O que quero fazer?
-
-# 1 - Gerar uma painel / lista de opção onde o usuario pode selecionar que tipo de operação ele deseja fazer
-
+#Calculadora com interface grafica usandando tkinter
 import math
+import tkinter as tk
+from tkinter import messagebox
 
+# Funções de cálculo
+def adicao():
+    resultado.set(n1.get() + n2.get())
 
-def adi(x,y):
-    return x + y
+def subtracao():
+    resultado.set(n1.get() - n2.get())
 
-def sub(x,y):
-    return x - y
+def multiplicacao():
+    resultado.set(n1.get() * n2.get())
 
-def mult(x,y):
-    return x * y
+def divisao():
+    if n2.get() == 0:
+        messagebox.showerror("Erro", "Divisão por zero não é permitida.")
+    else:
+        resultado.set(n1.get() / n2.get())
 
-def div(x,y):
-    if y == 0:
-        return "Erro: Divisão por zero"
-    return x / y
+def potenciacao():
+    resultado.set(n1.get() ** n2.get())
 
-def potencia(x,y):
-    return x ** y
+def raiz_quadrada():
+    resultado.set(math.sqrt(n1.get()))
 
-def raiz(x):
-    return math.sqrt(x)
+def resto():
+    resultado.set(n1.get() % n2.get())
 
-def resto(x,y):
-    return x % y
+# Função para atualizar a operação de acordo com a escolha no menu suspenso
+def atualizar_operacao():
+    op = operacao.get()
+    if op == "Adição (+)":
+        adicao()
+        operacao_selecionada.set("Operação: +")
+    elif op == "Subtração (-)":
+        subtracao()
+        operacao_selecionada.set("Operação: -")
+    elif op == "Multiplicação (*)":
+        multiplicacao()
+        operacao_selecionada.set("Operação: *")
+    elif op == "Divisão (/)":
+        divisao()
+        operacao_selecionada.set("Operação: /")
+    elif op == "Potenciação (^)":
+        potenciacao()
+        operacao_selecionada.set("Operação: ^")
+    elif op == "Raiz Quadrada (√)":
+        raiz_quadrada()
+        operacao_selecionada.set("Operação: √")
+    elif op == "Resto (%)":
+        resto()
+        operacao_selecionada.set("Operação: %")
 
-while True:
-    
+# Função para fechar o aplicativo
+def fechar():
+    janela.destroy()
 
-    print('[1] - Adição\n')
-    print('[2] - Subtração\n')
-    print('[3] - Multiplicação\n')
-    print('[4] - Divisão \n')
-    print('[5] - Potencia\n')
-    print('[6] - Raiz Quadrada\n')
-    print('[7] - Resto de um número\n')
+# Configuração da janela principal
+janela = tk.Tk()
+janela.title("Calculadora")
+janela.geometry("400x400")
 
-    print('Agora digite os numeros que deseja calcular')
+# Variáveis de controle
+n1 = tk.DoubleVar()
+n2 = tk.DoubleVar()
+resultado = tk.DoubleVar()
+operacao = tk.StringVar()  # Usamos StringVar para armazenar as operações
+operacao_selecionada = tk.StringVar()  # Variável para mostrar a operação selecionada
 
-    print("O Que deseja calcular? ")
+# Rótulo e caixas de entrada
+label1 = tk.Label(janela, text="Digite o primeiro número:")
+label1.pack()
+entry1 = tk.Entry(janela, textvariable=n1)
+entry1.pack()
 
-    option = str(input("Selecione de 1 a 7 para calcular seus numeros: "))
+label2 = tk.Label(janela, text="Digite o segundo número:")
+label2.pack()
+entry2 = tk.Entry(janela, textvariable=n2)
+entry2.pack()
 
-    if option not in ('1', '2', '3', '4', '5', '6', '7'):
-        print('Opção inválida')
-        continue
+# Lista de opções de operações com símbolos
+operacoes = [
+    "Adição (+)",
+    "Subtração (-)",
+    "Multiplicação (*)",
+    "Divisão (/)",
+    "Potenciação (^)",
+    "Raiz Quadrada (√)",
+    "Resto (%)"
+]
 
-    n1 = float(input('Digite o primeiro numero que deseja operar: '))
-    n2 = float(input('Digite o primeiro numero que deseja operar:  '))
+# Menu suspenso para seleção de operação
+label_operacao = tk.Label(janela, text="Selecione a operação:")
+label_operacao.pack()
+operacao_menu = tk.OptionMenu(janela, operacao, *operacoes)
+operacao_menu.pack()
 
+# Botão para calcular
+calcular_button = tk.Button(janela, text="Calcular", command=atualizar_operacao)
+calcular_button.pack()
 
-    
+# Rótulo para exibir a operação selecionada
+label_operacao_selecionada = tk.Label(janela, textvariable=operacao_selecionada)
+label_operacao_selecionada.pack()
 
-    if option == '1':
-        print('Resultado: ',adi(n1,n2))
+# Rótulo para exibir o resultado
+resultado_label = tk.Label(janela, text="Resultado: ")
+resultado_label.pack()
+resultado_entry = tk.Entry(janela, textvariable=resultado, state="readonly")
+resultado_entry.pack()
 
-    elif option == '2':
-        print('Resultado: ',sub(n1,n2))
+# Botão para fechar
+fechar_button = tk.Button(janela, text="Fechar", command=fechar)
+fechar_button.pack()
 
-    elif option == '3':
-        print('Resultado: ',mult(n1,n2))
-
-    elif option == '4':
-        print('Resultado: ',div(n1,n2))
-
-    elif option == '5':
-        print('Resultado: ', potencia(n1,n2))
-
-    elif option == '6':
-        print('Resultado: ',raiz(n1))
-
-    elif option == '7':
-        print('Resultado: ',resto(n1,n2))
-    
-    continuar = input('Deseja continuar calculando numeros? ')
-    if continuar != 's':
-        print('Fechando calculadora')
-        break
+janela.mainloop()
